@@ -5,7 +5,9 @@ import com.bobocode.nasapicturesstealer.service.model.NasaCamera;
 import com.bobocode.nasapicturesstealer.service.model.NasaPicture;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -15,6 +17,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 
+import static javax.management.timer.Timer.ONE_MINUTE;
+
 @RequiredArgsConstructor
 @Service
 public class NasaPictureReceiver {
@@ -22,7 +26,7 @@ public class NasaPictureReceiver {
     private final RestTemplate restTemplate;
     private final NasaUrlProperty nasaUrlProperty;
 
-    @Cacheable(value = "receiveAllPictures", key = "#sol")
+    @Cacheable(value = "receiveAllPictures")
     public List<NasaPicture> receiveAllPictures(int sol) {
         String url = getNasaUrl(sol);
 
@@ -62,6 +66,12 @@ public class NasaPictureReceiver {
                 .name(node.get("name").asText())
                 .fullName(node.get("full_name").asText())
                 .build();
+    }
+
+    @Scheduled(fixedRate = ONE_MINUTE)
+    @CacheEvict(value = {"receiveAllPictures"}, allEntries = true)
+    public void clearCache() {
+        System.out.println("Cache was cleared");
     }
 
 }
