@@ -21,7 +21,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 @Entity
 @Table(name = "cameras", schema = "public")
-public final class Camera {
+public class Camera {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)

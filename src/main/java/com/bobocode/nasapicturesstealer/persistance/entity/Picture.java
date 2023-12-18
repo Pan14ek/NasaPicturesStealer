@@ -20,7 +20,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Builder
 @Entity
 @Table(name = "pictures", schema = "public")
-public final class Picture {
+public class Picture {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
