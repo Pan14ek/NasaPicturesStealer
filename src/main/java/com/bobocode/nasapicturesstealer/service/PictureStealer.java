@@ -2,8 +2,6 @@ package com.bobocode.nasapicturesstealer.service;
 
 import com.bobocode.nasapicturesstealer.persistance.entity.Camera;
 import com.bobocode.nasapicturesstealer.persistance.entity.Picture;
-import com.bobocode.nasapicturesstealer.persistance.repository.CameraRepository;
-import com.bobocode.nasapicturesstealer.persistance.repository.PictureRepository;
 import com.bobocode.nasapicturesstealer.service.model.NasaCamera;
 import com.bobocode.nasapicturesstealer.service.model.NasaPicture;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +16,8 @@ import java.util.Optional;
 public class PictureStealer {
 
     private final NasaPictureReceiver nasaPictureReceiver;
-    private final CameraRepository cameraRepository;
-    private final PictureRepository pictureRepository;
+    private final CameraService cameraService;
+    private final PictureService pictureService;
 
     @Transactional
     public void stealNasaPictures(int sol) {
@@ -28,36 +26,23 @@ public class PictureStealer {
     }
 
     private void savePicture(NasaPicture nasaPicture) {
-        Camera camera = getCamera(nasaPicture);
-
-        Optional<Picture> optionalPicture = pictureRepository.findByNasaId(nasaPicture.id());
+        Optional<Picture> optionalPicture = pictureService.getByNasaId(nasaPicture.id());
 
         if (optionalPicture.isPresent()) {
             return;
         }
 
-        Picture picture = new Picture();
+        Camera camera = getCamera(nasaPicture);
 
-        picture.setNasaId(nasaPicture.id());
-        picture.setCamera(camera);
-        picture.setImgSrc(nasaPicture.imgSrc());
-        picture.setCreatedAt(nasaPicture.earthDate());
-
-        pictureRepository.save(picture);
+        pictureService.save(nasaPicture, camera);
     }
 
     private Camera getCamera(NasaPicture nasaPicture) {
         NasaCamera nasaCamera = nasaPicture.camera();
 
-        return cameraRepository.findByNasaId(nasaCamera.id())
-                .orElseGet(() -> {
-                            Camera camera = new Camera();
-                            camera.setNasaId(nasaCamera.id());
-                            camera.setName(nasaCamera.name());
+        Optional<Camera> cameraOptional = cameraService.getByNasaId(nasaCamera.id());
 
-                            return cameraRepository.save(camera);
-                        }
-                );
+        return cameraOptional.orElseGet(() -> cameraService.save(nasaCamera));
     }
 
 }
