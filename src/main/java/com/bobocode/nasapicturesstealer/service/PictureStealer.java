@@ -6,14 +6,14 @@ import com.bobocode.nasapicturesstealer.persistance.repository.CameraRepository;
 import com.bobocode.nasapicturesstealer.persistance.repository.PictureRepository;
 import com.bobocode.nasapicturesstealer.service.model.NasaCamera;
 import com.bobocode.nasapicturesstealer.service.model.NasaPicture;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class PictureStealer {
 
@@ -45,7 +45,6 @@ public class PictureStealer {
 
         pictureRepository.save(picture);
     }
-
 
     private Camera getCamera(NasaPicture nasaPicture) {
         NasaCamera nasaCamera = nasaPicture.camera();

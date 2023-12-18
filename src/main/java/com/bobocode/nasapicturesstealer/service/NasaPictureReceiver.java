@@ -4,7 +4,7 @@ import com.bobocode.nasapicturesstealer.configuration.NasaUrlProperty;
 import com.bobocode.nasapicturesstealer.service.model.NasaCamera;
 import com.bobocode.nasapicturesstealer.service.model.NasaPicture;
 import com.fasterxml.jackson.databind.JsonNode;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class NasaPictureReceiver {
 
