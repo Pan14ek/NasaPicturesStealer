@@ -22,7 +22,7 @@ public class NasaPictureReceiver {
     private final RestTemplate restTemplate;
     private final NasaUrlProperty nasaUrlProperty;
 
-    @Cacheable("receiveAllPictures")
+    @Cacheable(value = "receiveAllPictures", key = "#sol")
     public List<NasaPicture> receiveAllPictures(int sol) {
         String url = getNasaUrl(sol);
 
