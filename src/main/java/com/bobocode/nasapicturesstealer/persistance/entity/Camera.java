@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.Data;
 
 import java.util.List;
@@ -31,4 +32,7 @@ public class Camera {
     @OneToMany(mappedBy = "camera")
     private List<Picture> pictures;
 
+    @Version
+    @Column(name = "version")
+    private long version;
 }
