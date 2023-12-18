@@ -36,12 +36,12 @@ public class PictureStealer {
             return;
         }
 
-        Picture picture = Picture.builder()
-                .nasaId(nasaPicture.id())
-                .camera(camera)
-                .imgSrc(nasaPicture.imgSrc())
-                .createdAt(nasaPicture.earthDate())
-                .build();
+        Picture picture = new Picture();
+
+        picture.setNasaId(nasaPicture.id());
+        picture.setCamera(camera);
+        picture.setImgSrc(nasaPicture.imgSrc());
+        picture.setCreatedAt(nasaPicture.earthDate());
 
         pictureRepository.save(picture);
     }
@@ -52,10 +52,9 @@ public class PictureStealer {
 
         return cameraRepository.findByNasaId(nasaCamera.id())
                 .orElseGet(() -> {
-                            Camera camera = Camera.builder()
-                                    .nasaId(nasaCamera.id())
-                                    .name(nasaCamera.name())
-                                    .build();
+                            Camera camera = new Camera();
+                            camera.setNasaId(nasaCamera.id());
+                            camera.setName(nasaCamera.name());
 
                             return cameraRepository.save(camera);
                         }
